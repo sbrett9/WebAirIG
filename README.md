@@ -4,6 +4,12 @@ WebAirIG is a simple image generator that renders pseudo-MWIR imagery for testin
 gimbaled cameras ride on a 777 ownship flying figure-8s, and each one renders a jet-colored 2048×2048 view of the
 same world.
 
+Author's Note: Mea Culpa. This project is pure AI Slop. 
+As I was curious about CIGI, I had asked CLAUDE to prototype a CIGI 4.0 compliant fake IR Image Generator
+using the Godot Engine to drive pixel generation with a self hosted Radzen Blazor control interface and the ability to stream the pixels generated.
+
+
+
 - **Video:** each view is NVENC-encoded and streamed over UDP or TCP. Every frame carries its own ground-truth
   sidecar.
 - **Consumer:** decodes the streams, runs YOLO26, scores the detections against truth, and records labeled
