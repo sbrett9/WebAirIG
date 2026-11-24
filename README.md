@@ -218,20 +218,11 @@ draws procedural placeholders.
 - `POST /api/cameras/{id}` with a body such as `{"mode":"TrackEntity","trackEntityId":6,"fovDeg":10}`
 - `POST /api/sim/pause`, `/api/sim/resume`, `/api/sim/reset`
 
-## Terrain and geolocation (Cesium)
+## Terrain and geolocation
 
-There is no official Cesium plugin for Godot. As of November 2026, two community options exist:
-
-| Plugin | Version and support | Main limitation |
-|---|---|---|
-| `Battle-Road-Labs/3D-Tiles-For-Godot` | v1.0.1 (Aug 2025) | No C# bindings. |
-| `brynnb/cesium-godot` | v0.3.2 (Sep 2026). Tested on Godot 4.6.3–4.7.2; ships C# wrappers, `CesiumGeoreference`, `CesiumGlobeAnchor` and 3D tilesets. | Pre-1.0. |
-
-WebAirIG v1 renders a flat procedural world on a local tangent plane, with exact WGS-84 conversions at the CIGI,
-DIS and truth boundaries. Lat/lon/alt are therefore correct everywhere; only the rendered ground ignores earth
-curvature (about 31 m of drop at 20 km). Terrain is selected by `world.json` `terrain.provider`, which leaves room
-for a future `"cesium"` provider. That provider would anchor `CesiumGeoreference` at the same origin and replace
-the ground plane with Cesium World Terrain.
+WebAirIG renders a flat procedural world on a local tangent plane, with exact WGS-84 conversions at the CIGI, DIS
+and truth boundaries. Lat/lon/alt are therefore correct everywhere; only the rendered ground ignores earth curvature
+(about 31 m of drop at 20 km). The terrain is configured under `terrain` in `world.json`.
 
 ## Troubleshooting
 

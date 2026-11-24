@@ -23,7 +23,7 @@ public sealed class OriginDef
 
 public sealed class TerrainDef
 {
-    /// <summary>"procedural" (built in). Reserved for future providers such as "cesium".</summary>
+    /// <summary>Terrain provider.</summary>
     public string Provider { get; set; } = "procedural";
     public double SizeM { get; set; } = 240_000;
     public int Seed { get; set; } = 1337;
