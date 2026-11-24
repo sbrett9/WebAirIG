@@ -1,0 +1,7 @@
+{
+  "source": "models/aircraft/src/F22_RAPTOR/F-22 Raptor.blend",
+  "exports": [
+    { "out": "models/aircraft/glb/f22.glb", "roots": ["^Empty$"], "resetRootRotation": true,
+      "lengthM": 18.92, "maxTris": 150000, "maxTextureSize": 512, "kind": "aircraft" }
+  ]
+}

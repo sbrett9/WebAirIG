@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>WebAirIG.Host</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Radzen.Blazor" Version="13.2.1" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WebAirIG.Common\WebAirIG.Common.csproj" />
+    <ProjectReference Include="..\WebAirIG.Cigi\WebAirIG.Cigi.csproj" />
+    <ProjectReference Include="..\WebAirIG.Dis\WebAirIG.Dis.csproj" />
+    <ProjectReference Include="..\WebAirIG.Web.Mvvm\WebAirIG.Web.Mvvm.csproj" />
+  </ItemGroup>
+</Project>

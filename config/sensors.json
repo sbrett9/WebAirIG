@@ -1,0 +1,39 @@
+{
+  // Ownship camera rig. id = CIGI view ID; gimbal = CIGI articulated part (100 + id) on entity 0.
+  // mount: body FRD meters (x forward, y right, z down) relative to the ownship entity origin.
+  //        yawDeg/pitchDeg/rollDeg orient the mount (pitchDeg = -90 would make gimbal (0,0) look straight down).
+  // Gimbal angles are relative to the mount; see the per-rig description below and docs/ICD.md.
+  // LATERAL rig: at gimbal (0,0) each camera looks horizontally out its side of the aircraft.
+  //   mount yawDeg -90 = left side, +90 = right side (pitch 0). Image up = aircraft up; left cameras have the nose
+  //   on image right, right cameras have the tail on image right.
+  //   +elevation = up. +azimuth = clockwise seen from above: toward the NOSE for left cameras, toward the TAIL for right.
+  // Mounts measured on models/aircraft/glb/b777_united.glb (scale 5.7, origin = fuselage centerline at the wing root):
+  //   fore: fuselage sides at maximum breadth (skin radius 3.09 m), 18 m ahead of the origin, centerline height
+  //   aft:  horizontal stabilizer tips (semi-span 11.2 m, tip chord x -37.1..-39.5, 1.9 m above the centerline)
+  "cameras": [
+    {
+      "id": 0, "name": "FWD_L",
+      "mount": { "xFwdM": 18.0, "yRightM": -3.2, "zDownM": 0.0, "yawDeg": -90, "pitchDeg": 0, "rollDeg": 0 },
+      "limits": { "azMinDeg": -46.4, "azMaxDeg": 46.4, "elMinDeg": -23.2, "elMaxDeg": 23.2 },
+      "slewRateDegPerSec": 40, "width": 2048, "height": 2048, "fovDeg": 15, "fovMinDeg": 1, "fovMaxDeg": 45, "nearM": 0.5, "farM": 90000
+    },
+    {
+      "id": 1, "name": "FWD_R",
+      "mount": { "xFwdM": 18.0, "yRightM": 3.2, "zDownM": 0.0, "yawDeg": 90, "pitchDeg": 0, "rollDeg": 0 },
+      "limits": { "azMinDeg": -46.4, "azMaxDeg": 46.4, "elMinDeg": -23.2, "elMaxDeg": 23.2 },
+      "slewRateDegPerSec": 40, "width": 2048, "height": 2048, "fovDeg": 15, "fovMinDeg": 1, "fovMaxDeg": 45, "nearM": 0.5, "farM": 90000
+    },
+    {
+      "id": 2, "name": "AFT_L",
+      "mount": { "xFwdM": -38.3, "yRightM": -11.3, "zDownM": -1.9, "yawDeg": -90, "pitchDeg": 0, "rollDeg": 0 },
+      "limits": { "azMinDeg": -46.4, "azMaxDeg": 46.4, "elMinDeg": -23.2, "elMaxDeg": 23.2 },
+      "slewRateDegPerSec": 40, "width": 2048, "height": 2048, "fovDeg": 15, "fovMinDeg": 1, "fovMaxDeg": 45, "nearM": 0.5, "farM": 90000
+    },
+    {
+      "id": 3, "name": "AFT_R",
+      "mount": { "xFwdM": -38.3, "yRightM": 11.3, "zDownM": -1.9, "yawDeg": 90, "pitchDeg": 0, "rollDeg": 0 },
+      "limits": { "azMinDeg": -46.4, "azMaxDeg": 46.4, "elMinDeg": -23.2, "elMaxDeg": 23.2 },
+      "slewRateDegPerSec": 40, "width": 2048, "height": 2048, "fovDeg": 15, "fovMinDeg": 1, "fovMaxDeg": 45, "nearM": 0.5, "farM": 90000
+    }
+  ]
+}

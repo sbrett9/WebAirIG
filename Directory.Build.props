@@ -1,0 +1,9 @@
+<Project>
+  <!-- Applies to every project in the repo, including the Godot IG project. -->
+  <PropertyGroup>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <Authors>WebAirIG</Authors>
+  </PropertyGroup>
+</Project>

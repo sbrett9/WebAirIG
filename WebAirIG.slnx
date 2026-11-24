@@ -1,0 +1,16 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/WebAirIG.Common/WebAirIG.Common.csproj" />
+    <Project Path="src/WebAirIG.Cigi/WebAirIG.Cigi.csproj" />
+    <Project Path="src/WebAirIG.Dis/WebAirIG.Dis.csproj" />
+    <Project Path="src/WebAirIG.Web.Mvvm/WebAirIG.Web.Mvvm.csproj" />
+    <Project Path="src/WebAirIG.Host/WebAirIG.Host.csproj" />
+    <Project Path="src/WebAirIG.Consumer/WebAirIG.Consumer.csproj" />
+  </Folder>
+  <Folder Name="/ig/">
+    <Project Path="ig/WebAirIG.IG.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/WebAirIG.Tests/WebAirIG.Tests.csproj" />
+  </Folder>
+</Solution>

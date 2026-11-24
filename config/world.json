@@ -1,0 +1,24 @@
+{
+  // Geodetic origin of the local tangent plane. Host and IG MUST share this file so CIGI lat/lon round-trips exactly.
+  // The flat ground plane is rendered at origin altitude (ellipsoid height). Pattern altitudes are heights above it.
+  "origin": { "latDeg": 35.0, "lonDeg": -117.0, "altM": 700.0 },
+  "terrain": {
+    "provider": "procedural",
+    "sizeM": 240000,
+    "seed": 1337,
+    "baseTemp": 0.42,
+    "fieldContrast": 0.12,
+    "waterFraction": 0.08,
+    "waterTemp": 0.25,
+    "roadTemp": 0.58,
+    "urbanFraction": 0.05
+  },
+  "atmosphere": {
+    "visibilityM": 45000,
+    "pathTemp": 0.30,
+    "skyZenithTemp": 0.06,
+    "skyHorizonTemp": 0.32,
+    "sunAzimuthDeg": 135,
+    "sunElevationDeg": 45
+  }
+}

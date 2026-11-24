@@ -1,0 +1,18 @@
+html, body { margin: 0; }
+
+img.preview {
+    display: block;
+    max-width: 100%;
+    aspect-ratio: 1 / 1;
+    background: #10161c;
+    border-radius: 6px;
+    image-rendering: auto;
+}
+
+.kv-table { border-collapse: collapse; }
+.kv-table th { text-align: left; padding: 0.2rem 1rem 0.2rem 0; opacity: 0.75; font-weight: 500; }
+.kv-table td { padding: 0.2rem 0; font-family: Consolas, monospace; }
+
+/* Shell */
+.app-header { height: 100%; padding: 0 1rem 0 0.25rem; }
+.app-subtitle { opacity: 0.7; }

@@ -1,0 +1,72 @@
+@inherits ViewModelControl<MapViewModel>
+@inject IJSRuntime JS
+
+<RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0.5rem" Wrap="FlexWrap.Wrap" class="rz-mb-2">
+    <RadzenText TextStyle="TextStyle.Subtitle1" class="rz-m-0">Coverage</RadzenText>
+    <RadzenButton Size="ButtonSize.ExtraSmall" Icon="zoom_in" ButtonStyle="ButtonStyle.Light" Click="@(() => Vm.ZoomInCommand.Execute(null))" />
+    <RadzenButton Size="ButtonSize.ExtraSmall" Icon="zoom_out" ButtonStyle="ButtonStyle.Light" Click="@(() => Vm.ZoomOutCommand.Execute(null))" />
+    <RadzenButton Size="ButtonSize.ExtraSmall" ButtonStyle="ButtonStyle.Light"
+                  Icon="@(Vm.FollowOwnship ? "gps_fixed" : "gps_not_fixed")"
+                  Text="@(Vm.FollowOwnship ? "Following ownship" : "Origin centered")"
+                  Click="@(() => Vm.ToggleFollowCommand.Execute(null))" />
+    <RadzenText TextStyle="TextStyle.Caption" class="rz-m-0">@Vm.ScaleText</RadzenText>
+    <span class="flex-spacer"></span>
+    <RadzenText TextStyle="TextStyle.Caption" class="rz-m-0">Click to point</RadzenText>
+    <RadzenDropDown TValue="int" Data="@Vm.CameraOptions" TextProperty="Label" ValueProperty="Id"
+                    @bind-Value="Vm.SelectedCameraId" Style="width: 8rem" />
+</RadzenStack>
+
+<div class="map-frame">
+    <svg @ref="_svg" class="coverage-map" viewBox="0 0 1000 1000" @onclick="OnMapClick">
+        <rect x="0" y="0" width="1000" height="1000" class="map-bg" />
+        @foreach (var g in Vm.Grid)
+        {
+            <line x1="@g.X1" y1="@g.Y1" x2="@g.X2" y2="@g.Y2" class="@(g.Major ? "grid major" : "grid")" />
+        }
+        @foreach (var t in Vm.Trails)
+        {
+            <polyline points="@t.Points" stroke="@t.Color" class="trail" />
+        }
+        @foreach (var f in Vm.Footprints)
+        {
+            <polygon points="@f.Points" fill="@f.Color" fill-opacity="@f.Opacity" stroke="@f.Color"
+                     stroke-width="@(f.Selected ? 3 : 1.25)" class="footprint" />
+            <circle cx="@f.BoresightX" cy="@f.BoresightY" r="4" fill="@f.Color" class="boresight" />
+        }
+        @foreach (var m in Vm.Markers)
+        {
+            <g transform="translate(@m.X @m.Y)" class="marker">
+                @if (m.IsOwnship)
+                {
+                    <polygon points="0,-16 10,12 0,6 -10,12" fill="@m.Color" transform="rotate(@m.HeadingDeg)" />
+                }
+                else
+                {
+                    <circle r="6" fill="@m.Color" />
+                    <line x1="0" y1="0" x2="0" y2="-16" stroke="@m.Color" stroke-width="2" transform="rotate(@m.HeadingDeg)" />
+                }
+                <text x="10" y="-10" class="label">@m.Label</text>
+            </g>
+        }
+    </svg>
+</div>
+
+<div class="map-legend">
+    <span><span class="legend-dot" style="background:#ffffff"></span>Ownship</span>
+    <span><span class="legend-dot" style="background:#4fc3f7"></span>Friendly</span>
+    <span><span class="legend-dot" style="background:#ef5350"></span>Opposing</span>
+    <span><span class="legend-dot" style="background:#66bb6a"></span>Neutral</span>
+    <span><span class="legend-dot" style="background:#ffee58"></span>Other</span>
+    <span class="legend-note">Shaded polygons: camera ground footprints (sky-looking views clipped at 60 km)</span>
+</div>
+
+@code {
+    private ElementReference _svg;
+
+    // View glue: convert the click to the map's rendered size, then hand it to the ViewModel command.
+    private async Task OnMapClick(MouseEventArgs e)
+    {
+        var size = await JS.InvokeAsync<double[]>("webairig.elementSize", _svg);
+        Vm.ClickCommand.Execute(new MapClick(e.OffsetX, e.OffsetY, size.Length > 0 ? size[0] : MapViewModel.PixelSize));
+    }
+}

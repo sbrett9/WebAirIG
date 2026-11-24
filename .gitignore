@@ -1,0 +1,49 @@
+# Godot engine binaries (download separately)
+Godot_v*/
+Godot_v*.zip
+
+# Godot project caches
+ig/.godot/
+ig/.import/
+*.translation
+
+# .NET build output
+bin/
+obj/
+*.user
+.vs/
+TestResults/
+
+# Runtime output
+output/
+datasets/
+truth_logs/
+runs/
+# YOLO weights (Ultralytics, AGPL-3.0) are never committed; see models/yolo/README.md to fetch them.
+*.onnx
+*.pt
+
+# Python virtual environments
+.venv*/
+venv/
+__pycache__/
+
+# Model source archives and their extracted contents. Only runtime models are committed: models/*/glb (textures
+# embedded). Sources and licenses: THIRD-PARTY-NOTICES.md.
+*.zip
+*.rar
+*.7z
+# Unfinished browser downloads
+*.crdownload
+*.part
+models/*/src/
+models/munitions/source/
+models/munitions/textures/
+# Local-only models without a redistributable license (the catalog falls back to placeholders without them).
+models/local/
+
+# Local tools
+tools/ffmpeg/
+
+# Session hand-off notes and throwaway scripts
+scratchpad/

@@ -1,0 +1,7 @@
+{
+  "source": "models/aircraft/src/F15_EAGLE/f15.blend",
+  "exports": [
+    { "out": "models/aircraft/glb/f15.glb", "roots": ["^f_15$", "^Empty[.][0-9]+$"], "exclude": "^Plane[.]003$",
+      "lengthM": 19.43, "maxTris": 150000, "kind": "aircraft" }
+  ]
+}

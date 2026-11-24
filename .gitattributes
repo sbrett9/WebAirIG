@@ -1,0 +1,18 @@
+# Normalize text files to LF in the repository; checkouts use the platform's native endings.
+* text=auto
+
+# Shell scripts must stay LF so they run under bash on any platform.
+*.sh text eol=lf
+
+# Binary assets (never diff or convert).
+*.glb binary
+*.gltf binary
+*.obj binary
+*.mtl text
+*.blend binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.onnx binary
+*.pt binary
+*.nupkg binary

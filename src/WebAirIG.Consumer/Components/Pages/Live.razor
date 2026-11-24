@@ -1,0 +1,59 @@
+@page "/"
+@inherits ViewModelPage<LiveViewModel>
+
+<PageTitle>WebAirIG &middot; Live</PageTitle>
+
+<RadzenStack Gap="1rem">
+    <RadzenCard Variant="Variant.Outlined">
+        <RadzenStack Orientation="Orientation.Horizontal" Gap="0.5rem" AlignItems="AlignItems.End" Wrap="FlexWrap.Wrap">
+            <RadzenFormField Text="Protocol" Style="width: 7rem">
+                <RadzenDropDown TValue="string" Data="@Vm.ProtocolOptions" @bind-Value="Vm.Protocol" />
+            </RadzenFormField>
+            <RadzenFormField Text="Bind address" Style="width: 10rem"><RadzenTextBox @bind-Value="Vm.BindAddress" /></RadzenFormField>
+            <RadzenFormField Text="Port" Style="width: 7rem"><RadzenNumeric TValue="int" @bind-Value="Vm.Port" /></RadzenFormField>
+            <RadzenButton Icon="play_arrow" Text="@(Vm.ReceiverRunning ? "Restart" : "Start")" Click="@(() => Vm.StartReceiverCommand.Execute(null))" />
+            <RadzenButton Icon="stop" Text="Stop" ButtonStyle="ButtonStyle.Light" Disabled="@(!Vm.ReceiverRunning)" Click="@(() => Vm.StopReceiverCommand.Execute(null))" />
+            <RadzenStack Gap="0">
+                <RadzenBadge BadgeStyle="@(Vm.ReceiverRunning ? BadgeStyle.Success : BadgeStyle.Warning)" Text="@Vm.ReceiverStatus" />
+                <RadzenText TextStyle="TextStyle.Caption" class="rz-m-0">@Vm.ReceiverCounters</RadzenText>
+            </RadzenStack>
+        </RadzenStack>
+        <RadzenText TextStyle="TextStyle.Caption" class="rz-m-0 rz-mt-1">Decoder: @Vm.FfmpegStatus</RadzenText>
+    </RadzenCard>
+
+    <RadzenStack Orientation="Orientation.Horizontal" Gap="1rem" Wrap="FlexWrap.Wrap" AlignItems="AlignItems.Start">
+        <RadzenCard Variant="Variant.Outlined" Style="flex: 0 0 auto">
+            <RadzenStack Orientation="Orientation.Horizontal" Gap="0.75rem" AlignItems="AlignItems.Center" Wrap="FlexWrap.Wrap" class="rz-mb-2">
+                <RadzenDropDown TValue="int" Data="@Vm.ViewOptions" TextProperty="Label" ValueProperty="Id" @bind-Value="Vm.SelectedView" Style="width: 14rem" />
+                <RadzenDropDown TValue="int" Data="@Vm.PreviewSizeOptions" @bind-Value="Vm.PreviewSize" Style="width: 7rem" />
+                <RadzenStack Orientation="Orientation.Horizontal" Gap="0.25rem" AlignItems="AlignItems.Center">
+                    <RadzenSwitch @bind-Value="Vm.ShowTruth" /><span>Truth</span>
+                </RadzenStack>
+                <RadzenStack Orientation="Orientation.Horizontal" Gap="0.25rem" AlignItems="AlignItems.Center">
+                    <RadzenSwitch @bind-Value="Vm.ShowDetections" /><span>Detections</span>
+                </RadzenStack>
+                <RadzenButton Size="ButtonSize.Small" Icon="refresh" ButtonStyle="ButtonStyle.Light" Click="@(() => Vm.ReconnectPreviewCommand.Execute(null))" />
+            </RadzenStack>
+            <img class="preview" src="@Vm.PreviewUrl" alt="live preview" style="width: min(@(Vm.PreviewSize)px, 92vw)" />
+            <RadzenText TextStyle="TextStyle.Caption" class="rz-m-0">Green = truth, white = ownship, orange = YOLO detections (#track class score).</RadzenText>
+        </RadzenCard>
+
+        <RadzenCard Variant="Variant.Outlined" Style="flex: 1 1 420px">
+            <RadzenText TextStyle="TextStyle.H6">Cameras</RadzenText>
+            <RadzenDataGrid TItem="CameraRow" Data="@Vm.Cameras" Density="Density.Compact">
+                <Columns>
+                    <RadzenDataGridColumn TItem="CameraRow" Property="Id" Title="Cam" Width="55px" />
+                    <RadzenDataGridColumn TItem="CameraRow" Property="Name" Title="Name" />
+                    <RadzenDataGridColumn TItem="CameraRow" Property="Fps" Title="FPS" />
+                    <RadzenDataGridColumn TItem="CameraRow" Property="LatencyMs" Title="Latency ms" />
+                    <RadzenDataGridColumn TItem="CameraRow" Property="Decoded" Title="Decoded" />
+                    <RadzenDataGridColumn TItem="CameraRow" Property="Gaps" Title="Gaps" />
+                    <RadzenDataGridColumn TItem="CameraRow" Property="TruthObjects" Title="Truth" />
+                    <RadzenDataGridColumn TItem="CameraRow" Property="Detections" Title="Dets" />
+                    <RadzenDataGridColumn TItem="CameraRow" Property="InferenceMs" Title="Infer ms" />
+                    <RadzenDataGridColumn TItem="CameraRow" Property="Decoder" Title="Decoder" />
+                </Columns>
+            </RadzenDataGrid>
+        </RadzenCard>
+    </RadzenStack>
+</RadzenStack>

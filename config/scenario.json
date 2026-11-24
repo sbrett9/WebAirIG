@@ -1,0 +1,59 @@
+{
+  "ownship": {
+    "typeId": 1,
+    "name": "OWNSHIP",
+    "pattern": {
+      "kind": "figure8", "centerEastM": 0, "centerNorthM": 0, "altitudeM": 5000, "speedMps": 140,
+      "sizeAM": 12000, "sizeBM": 0, "headingDeg": 0, "clockwise": true, "phase": 0,
+      "bankFactor": 1.0, "maxBankDeg": 30
+    }
+  },
+  "targets": [
+    {
+      "entityId": 1, "name": "JET1", "typeId": 11, "enabled": true, "force": 1,
+      "pattern": { "kind": "racetrack", "centerEastM": 0, "centerNorthM": 0, "altitudeM": 4500, "speedMps": 110,
+                   "sizeAM": 10000, "sizeBM": 2500, "headingDeg": 30, "clockwise": true, "phase": 0.1, "bankFactor": 1, "maxBankDeg": 30 }
+    },
+    {
+      "entityId": 2, "name": "UAV1", "typeId": 20, "enabled": true, "force": 2,
+      "pattern": { "kind": "circle", "centerEastM": -4000, "centerNorthM": 3000, "altitudeM": 4200, "speedMps": 45,
+                   "sizeAM": 3000, "clockwise": false, "phase": 0.3, "bankFactor": 1, "maxBankDeg": 25,
+                   "altitudeAmplitudeM": 150, "altitudePeriodS": 240 }
+    },
+    {
+      "entityId": 3, "name": "QUAD1", "typeId": 30, "enabled": true, "force": 2,
+      "pattern": { "kind": "lawnmower", "centerEastM": 2000, "centerNorthM": -2000, "altitudeM": 300, "speedMps": 12,
+                   "sizeAM": 1500, "sizeBM": 200, "lanes": 4, "headingDeg": 0, "clockwise": true, "phase": 0, "bankFactor": 0.2, "maxBankDeg": 15 }
+    },
+    {
+      "entityId": 4, "name": "HELO1", "typeId": 40, "enabled": true, "force": 3,
+      "pattern": { "kind": "outAndBack", "centerEastM": 5000, "centerNorthM": 5000, "altitudeM": 800, "speedMps": 50,
+                   "sizeAM": 6000, "headingDeg": 120, "clockwise": true, "phase": 0, "bankFactor": 0.6, "maxBankDeg": 25 }
+    },
+    {
+      "entityId": 5, "name": "JET2", "typeId": 12, "enabled": true, "force": 2,
+      "pattern": { "kind": "figure8", "centerEastM": 0, "centerNorthM": 0, "altitudeM": 5600, "speedMps": 120,
+                   "sizeAM": 8000, "headingDeg": 90, "clockwise": false, "phase": 0.5, "bankFactor": 1, "maxBankDeg": 30 }
+    },
+    {
+      "entityId": 6, "name": "ESCORT", "typeId": 20, "enabled": true, "force": 1,
+      "pattern": { "kind": "formation", "formationFwdM": 0, "formationRightM": 1200, "formationDownM": 120,
+                   "formationWanderFwdM": 200, "formationWanderRightM": 300, "formationWanderDownM": 60, "formationWanderPeriodS": 90 }
+    },
+    {
+      "entityId": 7, "name": "RAPTOR1", "typeId": 13, "enabled": true, "force": 1,
+      "pattern": { "kind": "formation", "formationFwdM": -10, "formationRightM": -900, "formationDownM": 80,
+                   "formationWanderFwdM": 150, "formationWanderRightM": 200, "formationWanderDownM": 50, "formationWanderPeriodS": 120 }
+    },
+    {
+      "entityId": 8, "name": "HERC1", "typeId": 60, "enabled": true, "force": 1,
+      "pattern": { "kind": "racetrack", "centerEastM": -3000, "centerNorthM": -2000, "altitudeM": 4000, "speedMps": 140,
+                   "sizeAM": 9000, "sizeBM": 3000, "headingDeg": 60, "clockwise": false, "phase": 0.25, "bankFactor": 1, "maxBankDeg": 25 }
+    },
+    {
+      "entityId": 9, "name": "HAWK1", "typeId": 41, "enabled": true, "force": 3,
+      "pattern": { "kind": "weave", "centerEastM": 3000, "centerNorthM": -4000, "altitudeM": 400, "speedMps": 60,
+                   "sizeAM": 5000, "sizeBM": 300, "headingDeg": 20, "clockwise": true, "phase": 0, "bankFactor": 0.7, "maxBankDeg": 30 }
+    }
+  ]
+}

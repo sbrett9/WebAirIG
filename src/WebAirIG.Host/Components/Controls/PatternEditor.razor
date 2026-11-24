@@ -1,0 +1,61 @@
+@inherits ViewModelControl<PatternEditorViewModel>
+
+<RadzenStack Gap="0.5rem">
+    <RadzenStack Orientation="Orientation.Horizontal" Gap="0.5rem" Wrap="FlexWrap.Wrap" AlignItems="AlignItems.End">
+        <RadzenFormField Text="Pattern" Style="width: 11rem">
+            <RadzenDropDown TValue="WebAirIG.Common.Config.PatternKind" Data="@Vm.KindOptions" @bind-Value="Vm.Kind" />
+        </RadzenFormField>
+        <RadzenText TextStyle="TextStyle.Caption" class="rz-m-0">@Vm.LoopSummary</RadzenText>
+    </RadzenStack>
+
+    @if (!Vm.IsFormation)
+    {
+        <RadzenStack Orientation="Orientation.Horizontal" Gap="0.5rem" Wrap="FlexWrap.Wrap">
+            <RadzenFormField Text="Center east (m)" Style="width: 9.5rem"><RadzenNumeric TValue="double" @bind-Value="Vm.CenterEastM" Step="500" /></RadzenFormField>
+            <RadzenFormField Text="Center north (m)" Style="width: 9.5rem"><RadzenNumeric TValue="double" @bind-Value="Vm.CenterNorthM" Step="500" /></RadzenFormField>
+            <RadzenFormField Text="Altitude AGL (m)" Style="width: 9.5rem"><RadzenNumeric TValue="double" @bind-Value="Vm.AltitudeM" Step="100" /></RadzenFormField>
+            <RadzenFormField Text="Heading (deg)" Style="width: 8rem"><RadzenNumeric TValue="double" @bind-Value="Vm.HeadingDeg" Step="5" /></RadzenFormField>
+        </RadzenStack>
+    }
+
+    @if (Vm.HasLoop)
+    {
+        <RadzenStack Orientation="Orientation.Horizontal" Gap="0.5rem" Wrap="FlexWrap.Wrap" AlignItems="AlignItems.Center">
+            <RadzenFormField Text="Speed (m/s)" Style="width: 8rem"><RadzenNumeric TValue="double" @bind-Value="Vm.SpeedMps" Step="5" /></RadzenFormField>
+            <RadzenFormField Text="@Vm.SizeALabel" Style="width: 10rem"><RadzenNumeric TValue="double" @bind-Value="Vm.SizeAM" Step="250" /></RadzenFormField>
+            @if (Vm.UsesSizeB)
+            {
+                <RadzenFormField Text="@Vm.SizeBLabel" Style="width: 10rem"><RadzenNumeric TValue="double" @bind-Value="Vm.SizeBM" Step="50" /></RadzenFormField>
+            }
+            @if (Vm.UsesLanes)
+            {
+                <RadzenFormField Text="Lanes" Style="width: 6rem"><RadzenNumeric TValue="int" @bind-Value="Vm.Lanes" Step="2" /></RadzenFormField>
+            }
+            <RadzenFormField Text="Phase (0..1)" Style="width: 7rem"><RadzenNumeric TValue="double" @bind-Value="Vm.Phase" Step="0.05" Format="0.00" /></RadzenFormField>
+            <RadzenStack Orientation="Orientation.Horizontal" Gap="0.25rem" AlignItems="AlignItems.Center">
+                <RadzenSwitch @bind-Value="Vm.Clockwise" /><span>Clockwise</span>
+            </RadzenStack>
+        </RadzenStack>
+        <RadzenStack Orientation="Orientation.Horizontal" Gap="0.5rem" Wrap="FlexWrap.Wrap">
+            <RadzenFormField Text="Alt oscillation (m)" Style="width: 10rem"><RadzenNumeric TValue="double" @bind-Value="Vm.AltitudeAmplitudeM" Step="50" /></RadzenFormField>
+            <RadzenFormField Text="Alt period (s)" Style="width: 8rem"><RadzenNumeric TValue="double" @bind-Value="Vm.AltitudePeriodS" Step="10" /></RadzenFormField>
+            <RadzenFormField Text="Bank factor" Style="width: 7rem"><RadzenNumeric TValue="double" @bind-Value="Vm.BankFactor" Step="0.1" Format="0.0" /></RadzenFormField>
+            <RadzenFormField Text="Max bank (deg)" Style="width: 8rem"><RadzenNumeric TValue="double" @bind-Value="Vm.MaxBankDeg" Step="5" /></RadzenFormField>
+        </RadzenStack>
+    }
+
+    @if (Vm.IsFormation)
+    {
+        <RadzenStack Orientation="Orientation.Horizontal" Gap="0.5rem" Wrap="FlexWrap.Wrap">
+            <RadzenFormField Text="Offset fwd (m)" Style="width: 9rem"><RadzenNumeric TValue="double" @bind-Value="Vm.FormationFwdM" Step="50" /></RadzenFormField>
+            <RadzenFormField Text="Offset right (m)" Style="width: 9rem"><RadzenNumeric TValue="double" @bind-Value="Vm.FormationRightM" Step="50" /></RadzenFormField>
+            <RadzenFormField Text="Offset down (m)" Style="width: 9rem"><RadzenNumeric TValue="double" @bind-Value="Vm.FormationDownM" Step="50" /></RadzenFormField>
+        </RadzenStack>
+        <RadzenStack Orientation="Orientation.Horizontal" Gap="0.5rem" Wrap="FlexWrap.Wrap">
+            <RadzenFormField Text="Wander fwd ± (m)" Style="width: 9rem"><RadzenNumeric TValue="double" @bind-Value="Vm.FormationWanderFwdM" Step="50" Min="0" /></RadzenFormField>
+            <RadzenFormField Text="Wander right ± (m)" Style="width: 9rem"><RadzenNumeric TValue="double" @bind-Value="Vm.FormationWanderRightM" Step="50" Min="0" /></RadzenFormField>
+            <RadzenFormField Text="Wander down ± (m)" Style="width: 9rem"><RadzenNumeric TValue="double" @bind-Value="Vm.FormationWanderDownM" Step="25" Min="0" /></RadzenFormField>
+            <RadzenFormField Text="Wander period (s)" Style="width: 9rem"><RadzenNumeric TValue="double" @bind-Value="Vm.FormationWanderPeriodS" Step="10" Min="5" /></RadzenFormField>
+        </RadzenStack>
+    }
+</RadzenStack>

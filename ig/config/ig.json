@@ -1,0 +1,45 @@
+{
+  // Shared folder with world.json / entity_catalog.json / sensors.json (relative to this file).
+  "sharedConfigDir": "../../config",
+
+  "cigi": {
+    "listenPort": 8004,
+    "hostAddress": "127.0.0.1",
+    "hostPort": 8005,
+    // Synchronous mode: each frame the IG sends Start of Frame and waits (up to syncTimeoutMs) for the host's
+    // reply for that frame, so every rendered frame has exactly one simulation step.
+    "syncMode": true,
+    "syncTimeoutMs": 25,
+    "bigEndian": false
+  },
+
+  "render": {
+    "fps": 30,
+    "msaa": 4,
+    "maxSamplePoints": 600
+  },
+
+  "stream": {
+    "enabled": true,
+    "protocol": "udp",            // "udp" or "tcp" (tcp: the IG connects to a listening consumer)
+    "host": "127.0.0.1",
+    "port": 5600,
+    "codec": "h264",              // "h264" or "hevc"
+    "bitrateKbps": 25000,         // per camera
+    "gop": 30,
+    "preset": "p2",
+    "ffmpegPath": "",             // empty = WEBAIRIG_FFMPEG env, tools/ffmpeg/bin, then PATH
+    "encoderOverride": "",        // e.g. "libx264" to test without NVENC
+    "maxDatagramBytes": 1400,
+    "pacingMbps": 0,
+    "everyNFrames": 1,
+    // Optional standard MPEG-TS copy per camera for VLC/ffplay ({cam} = camera id), e.g. "udp://127.0.0.1:561{cam}?pkt_size=1316"
+    "mirrorUrlTemplate": ""
+  },
+
+  "truth": {
+    "embedInStream": true,
+    "logToDisk": false,
+    "logDir": "../../output/truth"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "source": "models/aircraft/src/SU_27_FLANKER/su27.blend",
+  "exports": [
+    { "out": "models/aircraft/glb/su27.glb", "roots": ["^sukhoi$", "^Cube[.]020$"],
+      "lengthM": 21.94, "maxTris": 150000, "kind": "aircraft" }
+  ]
+}

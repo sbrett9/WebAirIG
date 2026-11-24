@@ -1,0 +1,33 @@
+@page "/status"
+@inherits ViewModelPage<StatusViewModel>
+
+<PageTitle>WebAirIG &middot; Status</PageTitle>
+
+<RadzenStack Gap="1rem">
+    <RadzenCard Variant="Variant.Outlined">
+        <RadzenText TextStyle="TextStyle.H6">Links</RadzenText>
+        <table class="kv-table">
+            @foreach (var kv in Vm.Links)
+            {
+                <tr><th>@kv.Key</th><td>@kv.Value</td></tr>
+            }
+        </table>
+    </RadzenCard>
+    <RadzenCard Variant="Variant.Outlined">
+        <RadzenText TextStyle="TextStyle.H6">Entities</RadzenText>
+        <RadzenDataGrid TItem="EntityRow" Data="@Vm.Entities" Density="Density.Compact">
+            <Columns>
+                <RadzenDataGridColumn TItem="EntityRow" Property="Id" Title="ID" Width="60px" />
+                <RadzenDataGridColumn TItem="EntityRow" Property="Name" Title="Name" />
+                <RadzenDataGridColumn TItem="EntityRow" Property="Type" Title="Type" />
+                <RadzenDataGridColumn TItem="EntityRow" Property="Lat" Title="Lat" />
+                <RadzenDataGridColumn TItem="EntityRow" Property="Lon" Title="Lon" />
+                <RadzenDataGridColumn TItem="EntityRow" Property="AltM" Title="Alt HAE (m)" />
+                <RadzenDataGridColumn TItem="EntityRow" Property="HeadingDeg" Title="Hdg" />
+                <RadzenDataGridColumn TItem="EntityRow" Property="PitchDeg" Title="Pitch" />
+                <RadzenDataGridColumn TItem="EntityRow" Property="RollDeg" Title="Roll" />
+                <RadzenDataGridColumn TItem="EntityRow" Property="SpeedMps" Title="m/s" />
+            </Columns>
+        </RadzenDataGrid>
+    </RadzenCard>
+</RadzenStack>

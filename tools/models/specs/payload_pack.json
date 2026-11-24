@@ -1,0 +1,12 @@
+{
+  "source": "models/munitions/src/Aircraft_payload_pack/aircraftPayloadPack.blend",
+  "exports": [
+    { "out": "models/munitions/glb/aim9x.glb",  "roots": ["^aim9xFixedWings$"], "lengthM": 3.02, "kind": "store" },
+    { "out": "models/munitions/glb/aim120.glb", "roots": ["^AIM120$"],          "lengthM": 3.65, "kind": "store" },
+    { "out": "models/munitions/glb/aim54.glb",  "roots": ["^AIM54[.]001$"],     "lengthM": 3.96, "kind": "store" },
+    { "out": "models/munitions/glb/agm65.glb",  "roots": ["^AGM65$"],           "lengthM": 2.49, "kind": "store" },
+    { "out": "models/munitions/glb/agm84h.glb", "roots": ["^AGM84H-SLAM-ER$"],  "lengthM": 4.37, "kind": "store" },
+    { "out": "models/munitions/glb/gbu16.glb",  "roots": ["^gbu16PAVEWAY$"],    "lengthM": 3.70, "kind": "store" },
+    { "out": "models/munitions/glb/mk84.glb",   "roots": ["^mk84Body$"],        "lengthM": 3.84, "kind": "store" }
+  ]
+}

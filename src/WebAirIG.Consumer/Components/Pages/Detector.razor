@@ -1,0 +1,40 @@
+@page "/detector"
+@inherits ViewModelPage<DetectorViewModel>
+
+<PageTitle>WebAirIG &middot; Detector</PageTitle>
+
+<RadzenStack Gap="1rem">
+    <RadzenCard Variant="Variant.Outlined">
+        <RadzenText TextStyle="TextStyle.H6">YOLO model (ONNX)</RadzenText>
+        <RadzenStack Orientation="Orientation.Horizontal" Gap="0.5rem" AlignItems="AlignItems.End" Wrap="FlexWrap.Wrap">
+            <RadzenFormField Text="Model path" Style="flex: 1; min-width: 24rem"><RadzenTextBox @bind-Value="Vm.ModelPath" /></RadzenFormField>
+            <RadzenFormField Text="DirectML adapter (-1 = CPU)" Style="width: 12rem"><RadzenNumeric TValue="int" @bind-Value="Vm.DeviceId" Min="-1" /></RadzenFormField>
+            <RadzenButton Icon="upload_file" Text="Load" Click="@(() => Vm.LoadModelCommand.Execute(null))" />
+        </RadzenStack>
+        <RadzenStack Orientation="Orientation.Horizontal" Gap="0.5rem" AlignItems="AlignItems.Center" class="rz-mt-2" Wrap="FlexWrap.Wrap">
+            <RadzenBadge BadgeStyle="@(Vm.ModelLoaded ? BadgeStyle.Success : BadgeStyle.Warning)" Text="@Vm.Status" />
+            <RadzenText TextStyle="TextStyle.Caption" class="rz-m-0">mean inference @Vm.MeanInferenceMs ms</RadzenText>
+        </RadzenStack>
+    </RadzenCard>
+
+    <RadzenCard Variant="Variant.Outlined">
+        <RadzenText TextStyle="TextStyle.H6">Detection &amp; evaluation settings</RadzenText>
+        <RadzenStack Orientation="Orientation.Horizontal" Gap="1rem" AlignItems="AlignItems.Center" Wrap="FlexWrap.Wrap">
+            <RadzenStack Orientation="Orientation.Horizontal" Gap="0.25rem" AlignItems="AlignItems.Center"><RadzenSwitch @bind-Value="Vm.Enabled" /><span>Run detector</span></RadzenStack>
+            <RadzenFormField Text="Confidence" Style="width: 8rem"><RadzenNumeric TValue="double" @bind-Value="Vm.Confidence" Step="0.05" Format="0.00" /></RadzenFormField>
+            <RadzenFormField Text="NMS IoU" Style="width: 8rem"><RadzenNumeric TValue="double" @bind-Value="Vm.NmsIou" Step="0.05" Format="0.00" /></RadzenFormField>
+            <RadzenFormField Text="Match IoU" Style="width: 8rem"><RadzenNumeric TValue="double" @bind-Value="Vm.MatchIou" Step="0.05" Format="0.00" /></RadzenFormField>
+            <RadzenFormField Text="Min truth px" Style="width: 8rem"><RadzenNumeric TValue="double" @bind-Value="Vm.MinTruthPixels" Step="1" /></RadzenFormField>
+            <RadzenStack Orientation="Orientation.Horizontal" Gap="0.25rem" AlignItems="AlignItems.Center"><RadzenSwitch @bind-Value="Vm.ClassAgnostic" /><span>Class-agnostic matching</span></RadzenStack>
+            <RadzenStack Orientation="Orientation.Horizontal" Gap="0.25rem" AlignItems="AlignItems.Center"><RadzenSwitch @bind-Value="Vm.IncludeOwnship" /><span>Score ownship</span></RadzenStack>
+            <RadzenButton Icon="restart_alt" Text="Reset metrics" ButtonStyle="ButtonStyle.Light" Click="@(() => Vm.ResetMetricsCommand.Execute(null))" />
+        </RadzenStack>
+    </RadzenCard>
+
+    <RadzenCard Variant="Variant.Outlined">
+        <RadzenText TextStyle="TextStyle.H6">Metrics per camera</RadzenText>
+        <MetricsGrid Rows="Vm.CameraRows" />
+        <RadzenText TextStyle="TextStyle.H6" class="rz-mt-3">Metrics per truth class (FP rows: unmatched detections by detector class)</RadzenText>
+        <MetricsGrid Rows="Vm.ClassRows" />
+    </RadzenCard>
+</RadzenStack>

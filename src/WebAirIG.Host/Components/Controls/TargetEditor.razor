@@ -1,0 +1,23 @@
+@inherits ViewModelControl<TargetEditorViewModel>
+
+<RadzenStack Gap="0.5rem">
+    <RadzenStack Orientation="Orientation.Horizontal" Gap="0.5rem" Wrap="FlexWrap.Wrap" AlignItems="AlignItems.Center">
+        <RadzenFormField Text="Entity ID" Style="width: 7rem"><RadzenNumeric TValue="int" @bind-Value="Vm.EntityId" Min="1" /></RadzenFormField>
+        <RadzenFormField Text="Name / marking" Style="width: 10rem"><RadzenTextBox @bind-Value="Vm.Name" MaxLength="11" /></RadzenFormField>
+        <RadzenFormField Text="Type" Style="width: 15rem">
+            <RadzenDropDown TValue="int" Data="@Types" TextProperty="Label" ValueProperty="TypeId" @bind-Value="Vm.TypeId" />
+        </RadzenFormField>
+        <RadzenFormField Text="Force" Style="width: 9rem">
+            <RadzenDropDown TValue="byte" Data="@Forces" TextProperty="Label" ValueProperty="Id" @bind-Value="Vm.Force" />
+        </RadzenFormField>
+        <RadzenStack Orientation="Orientation.Horizontal" Gap="0.25rem" AlignItems="AlignItems.Center">
+            <RadzenSwitch @bind-Value="Vm.Enabled" /><span>Enabled</span>
+        </RadzenStack>
+    </RadzenStack>
+    <PatternEditor Vm="Vm.Pattern" />
+</RadzenStack>
+
+@code {
+    [Parameter, EditorRequired] public IReadOnlyList<TypeOption> Types { get; set; } = [];
+    [Parameter, EditorRequired] public IReadOnlyList<ForceOption> Forces { get; set; } = [];
+}

@@ -1,0 +1,56 @@
+@page "/scenario"
+@inherits ViewModelPage<ScenarioViewModel>
+
+<PageTitle>WebAirIG &middot; Scenario</PageTitle>
+
+<RadzenStack Gap="1rem">
+    <RadzenStack Orientation="Orientation.Horizontal" Gap="0.5rem" AlignItems="AlignItems.Center" Wrap="FlexWrap.Wrap">
+        <RadzenButton Icon="check" Text="Apply" Click="@(() => Vm.ApplyCommand.Execute(null))" />
+        <RadzenButton Icon="save" Text="Apply &amp; save" ButtonStyle="ButtonStyle.Secondary" Click="@(() => Vm.SaveCommand.Execute(null))" />
+        <RadzenButton Icon="undo" Text="Revert" ButtonStyle="ButtonStyle.Light" Click="@(() => Vm.RevertCommand.Execute(null))" />
+        <RadzenButton Icon="folder_open" Text="Reload file" ButtonStyle="ButtonStyle.Light" Click="@(() => Vm.ReloadCommand.Execute(null))" />
+        <RadzenButton Icon="restart_alt" Text="Reset sim time" ButtonStyle="ButtonStyle.Light" Click="@(() => Vm.ResetTimeCommand.Execute(null))" />
+        <RadzenText TextStyle="TextStyle.Body2" class="rz-m-0">@Vm.Status</RadzenText>
+    </RadzenStack>
+    <RadzenText TextStyle="TextStyle.Caption" class="rz-m-0">Scenario file: @Vm.ScenarioPath. Positions are meters east/north of the world origin; altitude is above the ground plane.</RadzenText>
+
+    <RadzenRow Gap="1rem">
+        <RadzenColumn Size="12" SizeLG="5">
+            <RadzenCard Variant="Variant.Outlined">
+                <RadzenText TextStyle="TextStyle.H6">Ownship (entity 0)</RadzenText>
+                <RadzenFormField Text="Type" Style="width: 15rem" class="rz-mb-2">
+                    <RadzenDropDown TValue="int" Data="@Vm.TypeOptions" TextProperty="Label" ValueProperty="TypeId" @bind-Value="Vm.OwnshipTypeId" />
+                </RadzenFormField>
+                <PatternEditor Vm="Vm.Ownship" />
+            </RadzenCard>
+        </RadzenColumn>
+
+        <RadzenColumn Size="12" SizeLG="7">
+            <RadzenCard Variant="Variant.Outlined">
+                <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween" AlignItems="AlignItems.Center">
+                    <RadzenText TextStyle="TextStyle.H6" class="rz-m-0">Targets</RadzenText>
+                    <RadzenStack Orientation="Orientation.Horizontal" Gap="0.25rem">
+                        <RadzenButton Size="ButtonSize.Small" Icon="add" Text="Add" Click="@(() => Vm.AddTargetCommand.Execute(null))" />
+                        <RadzenButton Size="ButtonSize.Small" Icon="delete" Text="Remove" ButtonStyle="ButtonStyle.Danger" Click="@(() => Vm.RemoveSelectedCommand.Execute(null))" />
+                    </RadzenStack>
+                </RadzenStack>
+                <RadzenDataGrid TItem="TargetEditorViewModel" Data="@Vm.Targets" SelectionMode="DataGridSelectionMode.Single"
+                                @bind-Value="Vm.Selection" Density="Density.Compact" AllowSorting="true" class="rz-my-2" Style="max-height: 280px">
+                    <Columns>
+                        <RadzenDataGridColumn TItem="TargetEditorViewModel" Property="EntityId" Title="ID" Width="60px" />
+                        <RadzenDataGridColumn TItem="TargetEditorViewModel" Property="Name" Title="Name" />
+                        <RadzenDataGridColumn TItem="TargetEditorViewModel" Property="TypeId" Title="Type" Width="70px" />
+                        <RadzenDataGridColumn TItem="TargetEditorViewModel" Property="Pattern.Kind" Title="Pattern" />
+                        <RadzenDataGridColumn TItem="TargetEditorViewModel" Property="Pattern.AltitudeM" Title="Alt (m)" Width="90px" />
+                        <RadzenDataGridColumn TItem="TargetEditorViewModel" Property="Pattern.SpeedMps" Title="Speed" Width="80px" />
+                        <RadzenDataGridColumn TItem="TargetEditorViewModel" Property="Enabled" Title="On" Width="60px" />
+                    </Columns>
+                </RadzenDataGrid>
+                @if (Vm.Selected is { } selected)
+                {
+                    <TargetEditor @key="selected" Vm="selected" Types="Vm.TypeOptions" Forces="Vm.ForceOptions" />
+                }
+            </RadzenCard>
+        </RadzenColumn>
+    </RadzenRow>
+</RadzenStack>

@@ -1,0 +1,92 @@
+@inherits ViewModelControl<CameraViewModel>
+
+<RadzenCard Variant="Variant.Outlined" class="camera-card">
+    <div class="cam-head" title="@Vm.MountText">
+        <span class="swatch" style="background:@Vm.Color"></span>
+        <span class="cam-name">@Vm.Name</span>
+        <span class="cam-sub">@Vm.BoresightText</span>
+        <span class="cam-readout">az @Vm.ActualAzDeg.ToString("F1")&deg; &middot; el @Vm.ActualElDeg.ToString("F1")&deg; &middot; fov @Vm.FovDeg.ToString("F1")&deg;</span>
+        <RadzenBadge BadgeStyle="@(Vm.LimitReached ? BadgeStyle.Warning : Vm.OnTarget ? BadgeStyle.Success : BadgeStyle.Info)" Text="@Vm.StatusText" />
+    </div>
+
+    <div class="cam-row">
+        <RadzenDropDown TValue="CameraMode" Data="@Vm.ModeOptions" @bind-Value="Vm.Mode" Style="width: 9.5rem" />
+        @if (Vm.IsTrackMode)
+        {
+            <RadzenDropDown TValue="int" Data="@Vm.TargetOptions" TextProperty="Label" ValueProperty="Id" @bind-Value="Vm.TrackEntityId"
+                            Placeholder="Select entity" Style="flex: 1; min-width: 10rem" />
+        }
+        @if (Vm.IsGeoMode)
+        {
+            <span class="cam-sub">Ground point @Vm.GeoPointText</span>
+        }
+        @if (Vm.IsScanMode)
+        {
+            <span class="cam-sub">&plusmn;</span>
+            <RadzenNumeric TValue="double" @bind-Value="Vm.ScanAmplitudeDeg" Step="1" Format="0" Style="width: 5.5rem" />
+            <span class="cam-sub">period s</span>
+            <RadzenNumeric TValue="double" @bind-Value="Vm.ScanPeriodS" Step="1" Format="0" Style="width: 5.5rem" />
+        }
+    </div>
+
+    @if (!string.IsNullOrEmpty(Vm.PointingNote))
+    {
+        <div class="pointing-note @(Vm.LimitReached ? "warn" : "")">@Vm.PointingNote</div>
+    }
+
+    <div class="slider-row">
+        <span class="slider-label">Azimuth</span>
+        <RadzenSlider TValue="double" @bind-Value="Vm.CmdAzDeg" Min="@((decimal)Vm.AzMin)" Max="@((decimal)Vm.AzMax)" Step="0.1" Style="flex: 1" />
+        <RadzenNumeric TValue="double" @bind-Value="Vm.CmdAzDeg" Step="0.5" Format="0.0" Style="width: 6rem" />
+    </div>
+    <div class="slider-row">
+        <span class="slider-label">Elevation</span>
+        <RadzenSlider TValue="double" @bind-Value="Vm.CmdElDeg" Min="@((decimal)Vm.ElMin)" Max="@((decimal)Vm.ElMax)" Step="0.1" Style="flex: 1" />
+        <RadzenNumeric TValue="double" @bind-Value="Vm.CmdElDeg" Step="0.5" Format="0.0" Style="width: 6rem" />
+    </div>
+    <div class="slider-row">
+        <span class="slider-label">FOV</span>
+        <RadzenSlider TValue="double" @bind-Value="Vm.FovDeg" Min="@((decimal)Vm.FovMin)" Max="@((decimal)Vm.FovMax)" Step="0.1" Style="flex: 1" />
+        <RadzenNumeric TValue="double" @bind-Value="Vm.FovDeg" Step="0.5" Format="0.0" Style="width: 6rem" />
+    </div>
+
+    <div class="preset-row">
+        <RadzenButton Size="ButtonSize.ExtraSmall" Text="Center" Click="@(() => Vm.CenterCommand.Execute(null))" />
+        <RadzenButton Size="ButtonSize.ExtraSmall" Text="Fwd" ButtonStyle="ButtonStyle.Light" Click="@(() => Vm.LookForwardCommand.Execute(null))" />
+        <RadzenButton Size="ButtonSize.ExtraSmall" Text="Aft" ButtonStyle="ButtonStyle.Light" Click="@(() => Vm.LookAftCommand.Execute(null))" />
+        <RadzenButton Size="ButtonSize.ExtraSmall" Text="Up" ButtonStyle="ButtonStyle.Light" Click="@(() => Vm.LookUpCommand.Execute(null))" />
+        <RadzenButton Size="ButtonSize.ExtraSmall" Text="Down" ButtonStyle="ButtonStyle.Light" Click="@(() => Vm.LookDownCommand.Execute(null))" />
+        <RadzenButton Size="ButtonSize.ExtraSmall" Text="Nadir" ButtonStyle="ButtonStyle.Light" Click="@(() => Vm.NadirCommand.Execute(null))" />
+        <RadzenButton Size="ButtonSize.ExtraSmall" Text="Left" ButtonStyle="ButtonStyle.Light" Click="@(() => Vm.LookLeftCommand.Execute(null))" />
+        <RadzenButton Size="ButtonSize.ExtraSmall" Text="Right" ButtonStyle="ButtonStyle.Light" Click="@(() => Vm.LookRightCommand.Execute(null))" />
+        <RadzenButton Size="ButtonSize.ExtraSmall" Text="Scan" ButtonStyle="ButtonStyle.Light" Click="@(() => Vm.ScanCommand.Execute(null))" />
+    </div>
+
+    <RadzenPanel AllowCollapse="true" Collapsed="true" class="ir-panel">
+        <HeaderTemplate>
+            <span class="cam-sub">IR sensor &middot; @Vm.Polarity &middot; gain @Vm.Gain.ToString("F2") &middot; level @Vm.Level.ToString("F2")@(Vm.SensorOn ? "" : " · OFF")</span>
+        </HeaderTemplate>
+        <ChildContent>
+            <RadzenStack Orientation="Orientation.Horizontal" Gap="0.5rem" AlignItems="AlignItems.Center" class="rz-mb-1">
+                <RadzenSwitch @bind-Value="Vm.SensorOn" />
+                <span>Sensor on</span>
+                <RadzenDropDown TValue="IrPolarity" Data="@Vm.PolarityOptions" @bind-Value="Vm.Polarity" Style="width: 8.5rem" />
+            </RadzenStack>
+            <div class="slider-row">
+                <span class="slider-label">Gain</span>
+                <RadzenSlider TValue="double" @bind-Value="Vm.Gain" Min="0.1m" Max="6m" Step="0.05" Style="flex: 1" />
+                <span class="value">@Vm.Gain.ToString("F2")</span>
+            </div>
+            <div class="slider-row">
+                <span class="slider-label">Level</span>
+                <RadzenSlider TValue="double" @bind-Value="Vm.Level" Min="0m" Max="1m" Step="0.01" Style="flex: 1" />
+                <span class="value">@Vm.Level.ToString("F2")</span>
+            </div>
+            <div class="slider-row">
+                <span class="slider-label">Noise</span>
+                <RadzenSlider TValue="double" @bind-Value="Vm.Noise" Min="0m" Max="0.2m" Step="0.005" Style="flex: 1" />
+                <span class="value">@Vm.Noise.ToString("F3")</span>
+            </div>
+        </ChildContent>
+    </RadzenPanel>
+</RadzenCard>

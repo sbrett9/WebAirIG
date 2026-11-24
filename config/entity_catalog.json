@@ -1,0 +1,295 @@
+{
+  // Entity types shared by the host (CIGI short type, DIS type, default speed) and the IG (model + IR signature).
+  //  model:            .glb / .gltf / .fbx / .obj path relative to this file. Empty or missing => procedural placeholder.
+  //  modelScale:       applied to the imported model (several free models are not authored in meters).
+  //  modelRotationDeg: Godot Euler XYZ degrees so the nose points to Godot -Z with +Y up.
+  //                    Models exported from Blender with the nose at -Y (most aircraft here) need [0, 180, 0].
+  //  modelOffsetFrdM:  shifts the scaled model (body FRD meters: forward, right, down) so the entity origin sits at the
+  //                    fuselage centerline / CG. Camera mounts in sensors.json are relative to that origin.
+  //  hotspots:         IR hotspots in body FRD meters relative to the entity origin.
+  //  classId/className: YOLO class written to truth and dataset labels.
+  //  dis:              SISO-REF-010 entity type. Category/domain values are best-effort defaults: verify for your exercise.
+  // Sources and licenses: THIRD-PARTY-NOTICES.md and models/aircraft/CREDITS.md. Measurements: tools/models/section_probe.py.
+  // Where a type's model is empty or missing, the IG and the 3D view draw the procedural placeholder instead.
+  // Models exported by tools/models/blend_extract_glb.py (specs in tools/models/specs/) are already normalized:
+  // meters, centered, nose at Godot -Z. They need modelScale 1 and no rotation or offset.
+  "types": [
+    {
+      // 777 (United livery). Blender model at ~1/5.7 scale, nose -Y, origin 0.962 units below the fuselage centerline.
+      // Scaled 5.7: length 73.9 m, fuselage dia 6.18 m, stab semi-span 11.2 m.
+      "typeId": 1, "name": "B777", "model": "../models/aircraft/glb/b777_united.glb",
+      "modelScale": 5.7, "modelRotationDeg": [0, 180, 0], "modelOffsetFrdM": [0, 0, 5.48],
+      "placeholder": { "kind": "airliner", "lengthM": 73.9, "spanM": 64.8, "heightM": 18.5 },
+      "ir": {
+        "skinTemp": 0.46, "solarGain": 0.10, "detailStrength": 0.06,
+        "hotspots": [
+          { "name": "engine_L", "positionFrdM": [2.85, -9.6, 3.1], "radiusM": 2.2, "temp": 0.9 },
+          { "name": "engine_R", "positionFrdM": [2.85, 9.6, 3.1], "radiusM": 2.2, "temp": 0.9 },
+          { "name": "exhaust_L", "positionFrdM": [-3.4, -9.6, 3.1], "radiusM": 1.4, "temp": 1.0 },
+          { "name": "exhaust_R", "positionFrdM": [-3.4, 9.6, 3.1], "radiusM": 1.4, "temp": 1.0 },
+          { "name": "apu", "positionFrdM": [-39.0, 0.0, -1.3], "radiusM": 0.7, "temp": 0.8 }
+        ]
+      },
+      "classId": 0, "className": "airliner",
+      "dis": { "kind": 1, "domain": 2, "country": 225, "category": 50, "subcategory": 0, "specific": 0, "extra": 0 },
+      "defaultSpeedMps": 140
+    },
+    {
+      "typeId": 10, "name": "BizJet", "model": "", "modelScale": 1.0, "modelRotationDeg": [0, 180, 0], "modelOffsetFrdM": [0, 0, 0],
+      "placeholder": { "kind": "jet", "lengthM": 17.0, "spanM": 16.0, "heightM": 5.0 },
+      "ir": {
+        "skinTemp": 0.47, "solarGain": 0.10, "detailStrength": 0.05,
+        "hotspots": [
+          { "name": "engine_L", "positionFrdM": [-5.0, -1.7, -0.9], "radiusM": 0.8, "temp": 0.95 },
+          { "name": "engine_R", "positionFrdM": [-5.0, 1.7, -0.9], "radiusM": 0.8, "temp": 0.95 }
+        ]
+      },
+      "classId": 1, "className": "jet",
+      "dis": { "kind": 1, "domain": 2, "country": 225, "category": 50, "subcategory": 0, "specific": 0, "extra": 0 },
+      "defaultSpeedMps": 110
+    },
+    {
+      // F-15 Eagle (shontoloyo, BlendSwap #84483, CC BY-NC 3.0). Extracted by blend_extract_glb.py (specs/f15.json):
+      // decimated 530k -> 150k triangles, scaled to 19.43 m. Landing gear and external stores are modeled extended.
+      // Nozzle exits measured on the exported mesh.
+      "typeId": 11, "name": "F15", "model": "../models/aircraft/glb/f15.glb",
+      "modelScale": 1.0, "modelRotationDeg": [0, 0, 0], "modelOffsetFrdM": [0, 0, 0],
+      "placeholder": { "kind": "jet", "lengthM": 19.43, "spanM": 13.05, "heightM": 5.63 },
+      "ir": {
+        "skinTemp": 0.47, "solarGain": 0.10, "detailStrength": 0.05,
+        "hotspots": [
+          { "name": "engine_L", "positionFrdM": [-5.4, -0.72, 0.6], "radiusM": 1.0, "temp": 0.8 },
+          { "name": "engine_R", "positionFrdM": [-5.4, 0.72, 0.6], "radiusM": 1.0, "temp": 0.8 },
+          { "name": "exhaust_L", "positionFrdM": [-7.87, -0.72, 0.78], "radiusM": 0.5, "temp": 1.05 },
+          { "name": "exhaust_R", "positionFrdM": [-7.87, 0.72, 0.78], "radiusM": 0.5, "temp": 1.05 }
+        ]
+      },
+      "classId": 9, "className": "fighter",
+      "dis": { "kind": 1, "domain": 2, "country": 225, "category": 1, "subcategory": 0, "specific": 0, "extra": 0 },
+      "defaultSpeedMps": 220
+    },
+    {
+      // Su-27 Flanker (shontoloyo, BlendSwap #88864, CC BY-NC 3.0). Extracted by blend_extract_glb.py (specs/su27.json):
+      // decimated 700k -> 150k triangles, scaled to 21.94 m. Landing gear and external stores are modeled extended.
+      "typeId": 12, "name": "SU27", "model": "../models/aircraft/glb/su27.glb",
+      "modelScale": 1.0, "modelRotationDeg": [0, 0, 0], "modelOffsetFrdM": [0, 0, 0],
+      "placeholder": { "kind": "jet", "lengthM": 21.94, "spanM": 14.7, "heightM": 5.93 },
+      "ir": {
+        "skinTemp": 0.47, "solarGain": 0.10, "detailStrength": 0.05,
+        "hotspots": [
+          { "name": "engine_L", "positionFrdM": [-7.0, -1.15, 0.9], "radiusM": 1.0, "temp": 0.8 },
+          { "name": "engine_R", "positionFrdM": [-7.0, 1.15, 0.9], "radiusM": 1.0, "temp": 0.8 },
+          { "name": "exhaust_L", "positionFrdM": [-9.5, -1.15, 1.04], "radiusM": 0.5, "temp": 1.05 },
+          { "name": "exhaust_R", "positionFrdM": [-9.5, 1.15, 1.04], "radiusM": 0.5, "temp": 1.05 }
+        ]
+      },
+      "classId": 9, "className": "fighter",
+      "dis": { "kind": 1, "domain": 2, "country": 222, "category": 1, "subcategory": 0, "specific": 0, "extra": 0 },
+      "defaultSpeedMps": 220
+    },
+    {
+      // F-22 Raptor (FA1RYDUST, BlendSwap #30247, CC BY; ambientCG CC0 metal textures). Extracted by
+      // blend_extract_glb.py (specs/f22.json): the author's posed 16 deg roll removed, scaled to 18.92 m, textures
+      // downscaled to 512 px. Low-poly (25k triangles), gear up. Nozzle exits measured on the exported mesh.
+      "typeId": 13, "name": "F22", "model": "../models/aircraft/glb/f22.glb",
+      "modelScale": 1.0, "modelRotationDeg": [0, 0, 0], "modelOffsetFrdM": [0, 0, 0],
+      "placeholder": { "kind": "jet", "lengthM": 18.92, "spanM": 13.56, "heightM": 5.08 },
+      "ir": {
+        "skinTemp": 0.46, "solarGain": 0.10, "detailStrength": 0.04,
+        "hotspots": [
+          { "name": "engine_L", "positionFrdM": [-5.2, -0.6, 0.8], "radiusM": 0.9, "temp": 0.8 },
+          { "name": "engine_R", "positionFrdM": [-5.2, 0.6, 0.8], "radiusM": 0.9, "temp": 0.8 },
+          { "name": "exhaust_L", "positionFrdM": [-7.45, -0.6, 1.0], "radiusM": 0.45, "temp": 1.05 },
+          { "name": "exhaust_R", "positionFrdM": [-7.45, 0.6, 1.0], "radiusM": 0.45, "temp": 1.05 }
+        ]
+      },
+      "classId": 9, "className": "fighter",
+      "dis": { "kind": 1, "domain": 2, "country": 225, "category": 1, "subcategory": 0, "specific": 0, "extra": 0 },
+      "defaultSpeedMps": 230
+    },
+    {
+      "typeId": 20, "name": "MALE_UAV", "model": "", "modelScale": 1.0, "modelRotationDeg": [0, 180, 0], "modelOffsetFrdM": [0, 0, 0],
+      "placeholder": { "kind": "uav", "lengthM": 11.0, "spanM": 20.0, "heightM": 3.6 },
+      "ir": {
+        "skinTemp": 0.44, "solarGain": 0.08, "detailStrength": 0.04,
+        "hotspots": [ { "name": "engine", "positionFrdM": [-4.8, 0.0, 0.0], "radiusM": 0.6, "temp": 0.85 } ]
+      },
+      "classId": 2, "className": "uav",
+      "dis": { "kind": 1, "domain": 2, "country": 225, "category": 41, "subcategory": 0, "specific": 0, "extra": 0 },
+      "defaultSpeedMps": 45
+    },
+    {
+      "typeId": 30, "name": "Quadcopter", "model": "", "modelScale": 1.0, "modelRotationDeg": [0, 180, 0], "modelOffsetFrdM": [0, 0, 0],
+      "placeholder": { "kind": "quad", "lengthM": 1.2, "spanM": 1.2, "heightM": 0.35 },
+      "ir": {
+        "skinTemp": 0.48, "solarGain": 0.06, "detailStrength": 0.02,
+        "hotspots": [
+          { "name": "motor_fl", "positionFrdM": [0.4, -0.4, 0.0], "radiusM": 0.12, "temp": 0.8 },
+          { "name": "motor_fr", "positionFrdM": [0.4, 0.4, 0.0], "radiusM": 0.12, "temp": 0.8 },
+          { "name": "motor_rl", "positionFrdM": [-0.4, -0.4, 0.0], "radiusM": 0.12, "temp": 0.8 },
+          { "name": "motor_rr", "positionFrdM": [-0.4, 0.4, 0.0], "radiusM": 0.12, "temp": 0.8 },
+          { "name": "battery", "positionFrdM": [0.0, 0.0, 0.0], "radiusM": 0.2, "temp": 0.65 }
+        ]
+      },
+      "classId": 3, "className": "drone",
+      "dis": { "kind": 1, "domain": 2, "country": 225, "category": 41, "subcategory": 0, "specific": 0, "extra": 0 },
+      "defaultSpeedMps": 15
+    },
+    {
+      "typeId": 40, "name": "Helicopter", "model": "", "modelScale": 1.0, "modelRotationDeg": [0, 180, 0], "modelOffsetFrdM": [0, 0, 0],
+      "placeholder": { "kind": "helo", "lengthM": 15.0, "spanM": 14.0, "heightM": 4.5 },
+      "ir": {
+        "skinTemp": 0.46, "solarGain": 0.09, "detailStrength": 0.04,
+        "hotspots": [
+          { "name": "engine", "positionFrdM": [-1.0, 0.0, -1.6], "radiusM": 0.9, "temp": 0.9 },
+          { "name": "exhaust", "positionFrdM": [-2.8, 0.0, -1.5], "radiusM": 0.7, "temp": 1.0 }
+        ]
+      },
+      "classId": 4, "className": "helicopter",
+      "dis": { "kind": 1, "domain": 2, "country": 225, "category": 21, "subcategory": 0, "specific": 0, "extra": 0 },
+      "defaultSpeedMps": 50
+    },
+    {
+      // UH-60 Black Hawk (PapaDragon, CC BY-SA 3.0). Scale 1.17 => rotor 16.4 m, nose to tail rotor 15.9 m.
+      // Origin is already near the fuselage center. Original textures were not shipped (skin is uniform in IR).
+      // Engine/exhaust positions are approximate (T700s on the cabin roof aft of the mast).
+      "typeId": 41, "name": "UH60", "model": "../models/aircraft/glb/uh60.glb",
+      "modelScale": 1.17, "modelRotationDeg": [0, 180, 0], "modelOffsetFrdM": [0, 0, 0],
+      "placeholder": { "kind": "helo", "lengthM": 15.3, "spanM": 16.4, "heightM": 5.1 },
+      "ir": {
+        "skinTemp": 0.46, "solarGain": 0.09, "detailStrength": 0.0,
+        "hotspots": [
+          { "name": "engine_L", "positionFrdM": [1.2, -0.55, -0.8], "radiusM": 0.6, "temp": 0.85 },
+          { "name": "engine_R", "positionFrdM": [1.2, 0.55, -0.8], "radiusM": 0.6, "temp": 0.85 },
+          { "name": "exhaust_L", "positionFrdM": [-0.6, -0.7, -0.8], "radiusM": 0.5, "temp": 0.9 },
+          { "name": "exhaust_R", "positionFrdM": [-0.6, 0.7, -0.8], "radiusM": 0.5, "temp": 0.9 }
+        ]
+      },
+      "classId": 4, "className": "helicopter",
+      "dis": { "kind": 1, "domain": 2, "country": 225, "category": 21, "subcategory": 0, "specific": 0, "extra": 0 },
+      "defaultSpeedMps": 70
+    },
+    {
+      // C-130 (hjmediastudios, CC BY 3.0). Blender model at ~1/4.1 scale, nose -Y, origin at ground level 0.62 units
+      // below the fuselage center. Scaled 4.1: span 41.4 m, length 29.2 m. Props measured at +/-1.29 and +/-2.56 units.
+      "typeId": 60, "name": "C130", "model": "../models/aircraft/glb/c130.glb",
+      "modelScale": 4.1, "modelRotationDeg": [0, 180, 0], "modelOffsetFrdM": [0, 0, 2.54],
+      "placeholder": { "kind": "jet", "lengthM": 29.8, "spanM": 40.4, "heightM": 11.8 },
+      "ir": {
+        "skinTemp": 0.45, "solarGain": 0.10, "detailStrength": 0.06,
+        "hotspots": [
+          { "name": "engine_1", "positionFrdM": [3.5, -10.5, -1.1], "radiusM": 1.0, "temp": 0.85 },
+          { "name": "engine_2", "positionFrdM": [3.5, -5.3, -1.1], "radiusM": 1.0, "temp": 0.85 },
+          { "name": "engine_3", "positionFrdM": [3.5, 5.3, -1.1], "radiusM": 1.0, "temp": 0.85 },
+          { "name": "engine_4", "positionFrdM": [3.5, 10.5, -1.1], "radiusM": 1.0, "temp": 0.85 },
+          { "name": "exhaust_1", "positionFrdM": [1.5, -10.5, -1.3], "radiusM": 0.6, "temp": 1.0 },
+          { "name": "exhaust_2", "positionFrdM": [1.5, -5.3, -1.3], "radiusM": 0.6, "temp": 1.0 },
+          { "name": "exhaust_3", "positionFrdM": [1.5, 5.3, -1.3], "radiusM": 0.6, "temp": 1.0 },
+          { "name": "exhaust_4", "positionFrdM": [1.5, 10.5, -1.3], "radiusM": 0.6, "temp": 1.0 }
+        ]
+      },
+      "classId": 6, "className": "transport",
+      "dis": { "kind": 1, "domain": 2, "country": 225, "category": 4, "subcategory": 0, "specific": 0, "extra": 0 },
+      "defaultSpeedMps": 150
+    },
+    // ---- Munitions ------------------------------------------------------------------------------------------------
+    // Models: "Aircraft payload pack" by manfro1981 (BlendSwap #38676, CC BY 3.0), one .glb per weapon from
+    // tools/models/blend_extract_glb.py (specs/payload_pack.json): centered, real length in meters, nose at Godot -Z.
+    // Missiles carry a motor hotspot at the nozzle (tail = -length/2). Bombs are unpowered (skin only).
+    {
+      "typeId": 70, "name": "AIM-9X", "model": "../models/munitions/glb/aim9x.glb", "modelScale": 1.0, "modelRotationDeg": [0, 0, 0], "modelOffsetFrdM": [0, 0, 0],
+      "placeholder": { "kind": "missile", "lengthM": 3.02, "spanM": 0.45, "heightM": 0.45 },
+      "ir": { "skinTemp": 0.5, "solarGain": 0.05, "detailStrength": 0.04,
+              "hotspots": [ { "name": "motor", "positionFrdM": [-1.51, 0, 0], "radiusM": 0.2, "temp": 1.3 } ] },
+      "classId": 7, "className": "missile",
+      "dis": { "kind": 2, "domain": 1, "country": 225, "category": 1, "subcategory": 0, "specific": 0, "extra": 0 },
+      "defaultSpeedMps": 300
+    },
+    {
+      "typeId": 71, "name": "AIM-120", "model": "../models/munitions/glb/aim120.glb", "modelScale": 1.0, "modelRotationDeg": [0, 0, 0], "modelOffsetFrdM": [0, 0, 0],
+      "placeholder": { "kind": "missile", "lengthM": 3.65, "spanM": 0.53, "heightM": 0.53 },
+      "ir": { "skinTemp": 0.5, "solarGain": 0.05, "detailStrength": 0.04,
+              "hotspots": [ { "name": "motor", "positionFrdM": [-1.82, 0, 0], "radiusM": 0.22, "temp": 1.3 } ] },
+      "classId": 7, "className": "missile",
+      "dis": { "kind": 2, "domain": 1, "country": 225, "category": 1, "subcategory": 0, "specific": 0, "extra": 0 },
+      "defaultSpeedMps": 300
+    },
+    {
+      // No model yet: procedural missile placeholder.
+      "typeId": 72, "name": "AIM-7", "model": "", "modelScale": 1.0, "modelRotationDeg": [0, 0, 0], "modelOffsetFrdM": [0, 0, 0],
+      "placeholder": { "kind": "missile", "lengthM": 3.66, "spanM": 1.0, "heightM": 1.0 },
+      "ir": { "skinTemp": 0.5, "solarGain": 0.05, "detailStrength": 0.04,
+              "hotspots": [ { "name": "motor", "positionFrdM": [-1.83, 0, 0], "radiusM": 0.25, "temp": 1.3 } ] },
+      "classId": 7, "className": "missile",
+      "dis": { "kind": 2, "domain": 1, "country": 225, "category": 1, "subcategory": 0, "specific": 0, "extra": 0 },
+      "defaultSpeedMps": 300
+    },
+    {
+      "typeId": 73, "name": "AIM-54", "model": "../models/munitions/glb/aim54.glb", "modelScale": 1.0, "modelRotationDeg": [0, 0, 0], "modelOffsetFrdM": [0, 0, 0],
+      "placeholder": { "kind": "missile", "lengthM": 3.96, "spanM": 0.9, "heightM": 0.9 },
+      "ir": { "skinTemp": 0.5, "solarGain": 0.05, "detailStrength": 0.04,
+              "hotspots": [ { "name": "motor", "positionFrdM": [-1.98, 0, 0], "radiusM": 0.3, "temp": 1.3 } ] },
+      "classId": 7, "className": "missile",
+      "dis": { "kind": 2, "domain": 1, "country": 225, "category": 1, "subcategory": 0, "specific": 0, "extra": 0 },
+      "defaultSpeedMps": 300
+    },
+    {
+      "typeId": 74, "name": "AGM-65", "model": "../models/munitions/glb/agm65.glb", "modelScale": 1.0, "modelRotationDeg": [0, 0, 0], "modelOffsetFrdM": [0, 0, 0],
+      "placeholder": { "kind": "missile", "lengthM": 2.49, "spanM": 0.72, "heightM": 0.72 },
+      "ir": { "skinTemp": 0.5, "solarGain": 0.05, "detailStrength": 0.04,
+              "hotspots": [ { "name": "motor", "positionFrdM": [-1.25, 0, 0], "radiusM": 0.25, "temp": 1.3 } ] },
+      "classId": 7, "className": "missile",
+      "dis": { "kind": 2, "domain": 2, "country": 225, "category": 1, "subcategory": 0, "specific": 0, "extra": 0 },
+      "defaultSpeedMps": 250
+    },
+    {
+      // No model yet: procedural missile placeholder.
+      "typeId": 75, "name": "AGM-88", "model": "", "modelScale": 1.0, "modelRotationDeg": [0, 0, 0], "modelOffsetFrdM": [0, 0, 0],
+      "placeholder": { "kind": "missile", "lengthM": 4.17, "spanM": 1.12, "heightM": 1.12 },
+      "ir": { "skinTemp": 0.5, "solarGain": 0.05, "detailStrength": 0.04,
+              "hotspots": [ { "name": "motor", "positionFrdM": [-2.08, 0, 0], "radiusM": 0.25, "temp": 1.3 } ] },
+      "classId": 7, "className": "missile",
+      "dis": { "kind": 2, "domain": 4, "country": 225, "category": 1, "subcategory": 0, "specific": 0, "extra": 0 },
+      "defaultSpeedMps": 300
+    },
+    {
+      // Paveway II (1,000 lb). Replaces the earlier GBU-24 entry: the payload pack has the GBU-16.
+      "typeId": 76, "name": "GBU-16", "model": "../models/munitions/glb/gbu16.glb", "modelScale": 1.0, "modelRotationDeg": [0, 0, 0], "modelOffsetFrdM": [0, 0, 0],
+      "placeholder": { "kind": "bomb", "lengthM": 3.7, "spanM": 0.9, "heightM": 0.9 },
+      "ir": { "skinTemp": 0.47, "solarGain": 0.06, "detailStrength": 0.05,
+              "hotspots": [] },
+      "classId": 8, "className": "bomb",
+      "dis": { "kind": 2, "domain": 11, "country": 225, "category": 1, "subcategory": 0, "specific": 0, "extra": 0 },
+      "defaultSpeedMps": 200
+    },
+    {
+      // No model yet: procedural bomb placeholder.
+      "typeId": 77, "name": "GBU-57", "model": "", "modelScale": 1.0, "modelRotationDeg": [0, 0, 0], "modelOffsetFrdM": [0, 0, 0],
+      "placeholder": { "kind": "bomb", "lengthM": 6.2, "spanM": 1.6, "heightM": 1.6 },
+      "ir": { "skinTemp": 0.47, "solarGain": 0.06, "detailStrength": 0.05,
+              "hotspots": [] },
+      "classId": 8, "className": "bomb",
+      "dis": { "kind": 2, "domain": 11, "country": 225, "category": 1, "subcategory": 0, "specific": 0, "extra": 0 },
+      "defaultSpeedMps": 200
+    },
+    {
+      // SLAM-ER, wings stowed as modeled.
+      "typeId": 78, "name": "AGM-84H", "model": "../models/munitions/glb/agm84h.glb", "modelScale": 1.0, "modelRotationDeg": [0, 0, 0], "modelOffsetFrdM": [0, 0, 0],
+      "placeholder": { "kind": "missile", "lengthM": 4.37, "spanM": 0.8, "heightM": 0.8 },
+      "ir": { "skinTemp": 0.5, "solarGain": 0.05, "detailStrength": 0.04,
+              "hotspots": [ { "name": "motor", "positionFrdM": [-2.19, 0, 0], "radiusM": 0.17, "temp": 1.3 } ] },
+      "classId": 7, "className": "missile",
+      "dis": { "kind": 2, "domain": 2, "country": 225, "category": 1, "subcategory": 0, "specific": 0, "extra": 0 },
+      "defaultSpeedMps": 240
+    },
+    {
+      "typeId": 79, "name": "Mk-84", "model": "../models/munitions/glb/mk84.glb", "modelScale": 1.0, "modelRotationDeg": [0, 0, 0], "modelOffsetFrdM": [0, 0, 0],
+      "placeholder": { "kind": "bomb", "lengthM": 3.84, "spanM": 0.64, "heightM": 0.64 },
+      "ir": { "skinTemp": 0.47, "solarGain": 0.06, "detailStrength": 0.05,
+              "hotspots": [] },
+      "classId": 8, "className": "bomb",
+      "dis": { "kind": 2, "domain": 11, "country": 225, "category": 1, "subcategory": 0, "specific": 0, "extra": 0 },
+      "defaultSpeedMps": 200
+    }
+  ]
+}

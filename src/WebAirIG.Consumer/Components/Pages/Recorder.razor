@@ -1,0 +1,41 @@
+@page "/recorder"
+@inherits ViewModelPage<RecorderViewModel>
+
+<PageTitle>WebAirIG &middot; Recorder</PageTitle>
+
+<RadzenStack Gap="1rem">
+    <RadzenCard Variant="Variant.Outlined">
+        <RadzenText TextStyle="TextStyle.H6">YOLO dataset from truth</RadzenText>
+        <RadzenText TextStyle="TextStyle.Body2">
+            Writes every Nth decoded frame of each camera with YOLO labels generated from the per-frame truth sidecar.
+            Class IDs come from the entity catalog: @Vm.ClassMap
+        </RadzenText>
+        <RadzenStack Orientation="Orientation.Horizontal" Gap="0.5rem" AlignItems="AlignItems.End" Wrap="FlexWrap.Wrap" class="rz-mt-2">
+            <RadzenFormField Text="Output folder" Style="min-width: 18rem"><RadzenTextBox @bind-Value="Vm.OutputDir" Disabled="@Vm.Recording" /></RadzenFormField>
+            <RadzenFormField Text="Dataset name" Style="width: 12rem"><RadzenTextBox @bind-Value="Vm.DatasetName" Disabled="@Vm.Recording" /></RadzenFormField>
+            <RadzenFormField Text="Every N frames" Style="width: 9rem"><RadzenNumeric TValue="int" @bind-Value="Vm.EveryNFrames" Min="1" /></RadzenFormField>
+            <RadzenFormField Text="Format" Style="width: 7rem"><RadzenDropDown TValue="string" Data="@Vm.FormatOptions" @bind-Value="Vm.Format" Disabled="@Vm.Recording" /></RadzenFormField>
+            <RadzenFormField Text="Min box px" Style="width: 8rem"><RadzenNumeric TValue="double" @bind-Value="Vm.MinBoxPixels" Step="1" /></RadzenFormField>
+        </RadzenStack>
+        <RadzenStack Orientation="Orientation.Horizontal" Gap="1rem" AlignItems="AlignItems.Center" class="rz-mt-2" Wrap="FlexWrap.Wrap">
+            <RadzenStack Orientation="Orientation.Horizontal" Gap="0.25rem" AlignItems="AlignItems.Center"><RadzenSwitch @bind-Value="Vm.IncludeOwnship" /><span>Label ownship</span></RadzenStack>
+            <RadzenStack Orientation="Orientation.Horizontal" Gap="0.25rem" AlignItems="AlignItems.Center"><RadzenSwitch @bind-Value="Vm.IncludeEmptyFrames" /><span>Keep frames with no objects (negatives)</span></RadzenStack>
+            <RadzenButton Icon="fiber_manual_record" Text="Start" ButtonStyle="ButtonStyle.Danger" Disabled="@Vm.Recording" Click="@(() => Vm.StartCommand.Execute(null))" />
+            <RadzenButton Icon="stop" Text="Stop" ButtonStyle="ButtonStyle.Light" Disabled="@(!Vm.Recording)" Click="@(() => Vm.StopCommand.Execute(null))" />
+        </RadzenStack>
+    </RadzenCard>
+
+    <RadzenCard Variant="Variant.Outlined">
+        <RadzenBadge BadgeStyle="@(Vm.Recording ? BadgeStyle.Danger : BadgeStyle.Light)" Text="@Vm.Status" />
+        <table class="kv-table rz-mt-2">
+            <tr><th>Images</th><td>@Vm.Images</td></tr>
+            <tr><th>Labeled objects</th><td>@Vm.Objects</td></tr>
+            <tr><th>Dropped (writer busy)</th><td>@Vm.Dropped</td></tr>
+            @foreach (var kv in Vm.ClassCounts)
+            {
+                <tr><th>&nbsp;&nbsp;@kv.Key</th><td>@kv.Value</td></tr>
+            }
+            <tr><th>Train</th><td>@Vm.TrainCommand</td></tr>
+        </table>
+    </RadzenCard>
+</RadzenStack>

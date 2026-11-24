@@ -1,0 +1,24 @@
+@inherits ViewModelLayout<ShellViewModel>
+
+<RadzenLayout class="webairig-layout">
+    <RadzenHeader>
+        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0.5rem" class="app-header">
+            <RadzenSidebarToggle Click="@(() => Vm.ToggleSidebarCommand.Execute(null))" />
+            <RadzenIcon Icon="satellite_alt" />
+            <RadzenText TextStyle="TextStyle.H6" class="rz-m-0">WebAirIG Consumer</RadzenText>
+            <RadzenText TextStyle="TextStyle.Caption" class="rz-m-0 app-subtitle">NVDEC decode &middot; YOLO26 detection &middot; truth evaluation &middot; dataset capture</RadzenText>
+        </RadzenStack>
+    </RadzenHeader>
+    <RadzenSidebar @bind-Expanded="Vm.SidebarExpanded">
+        <RadzenPanelMenu>
+            <RadzenPanelMenuItem Text="Live" Icon="live_tv" Path="" />
+            <RadzenPanelMenuItem Text="Detector &amp; metrics" Icon="center_focus_strong" Path="detector" />
+            <RadzenPanelMenuItem Text="Dataset recorder" Icon="fiber_manual_record" Path="recorder" />
+        </RadzenPanelMenu>
+    </RadzenSidebar>
+    <RadzenBody>
+        <div class="rz-p-3">
+            @Body
+        </div>
+    </RadzenBody>
+</RadzenLayout>

@@ -1,0 +1,46 @@
+@page "/"
+@inherits ViewModelPage<ControlViewModel>
+
+<PageTitle>WebAirIG &middot; Sensors</PageTitle>
+
+<RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0.5rem" Wrap="FlexWrap.Wrap" class="rz-mb-3">
+    <RadzenBadge BadgeStyle="@(Vm.IgConnected ? BadgeStyle.Success : BadgeStyle.Warning)" Text="@Vm.IgStatusText" />
+    <RadzenBadge BadgeStyle="BadgeStyle.Info" Text="@Vm.SimTimeText" />
+    <RadzenButton Size="ButtonSize.Small" Icon="@(Vm.Paused ? "play_arrow" : "pause")" Text="@(Vm.Paused ? "Resume" : "Pause")"
+                  Click="@(() => Vm.TogglePauseCommand.Execute(null))" />
+    <RadzenButton Size="ButtonSize.Small" Icon="restart_alt" Text="Reset time" ButtonStyle="ButtonStyle.Light"
+                  Click="@(() => Vm.ResetTimeCommand.Execute(null))" />
+    <RadzenButton Size="ButtonSize.Small" Icon="center_focus_weak" Text="All center" ButtonStyle="ButtonStyle.Light"
+                  Click="@(() => Vm.AllCenterCommand.Execute(null))" />
+</RadzenStack>
+
+<RadzenRow Gap="1rem" AlignItems="AlignItems.Start">
+    <RadzenColumn Size="12" SizeLG="7">
+        <RadzenCard Variant="Variant.Outlined">
+            <div class="coverage-switch">
+                <RadzenSelectBar TValue="bool" @bind-Value="Vm.Show3D" Size="ButtonSize.Small">
+                    <Items>
+                        <RadzenSelectBarItem Text="3D view" Value="true" Icon="view_in_ar" />
+                        <RadzenSelectBarItem Text="2D map" Value="false" Icon="map" />
+                    </Items>
+                </RadzenSelectBar>
+            </div>
+            @if (Vm.Show3D)
+            {
+                <Scene3DView Vm="Vm.Scene3D" />
+            }
+            else
+            {
+                <CoverageMap Vm="Vm.Map" />
+            }
+        </RadzenCard>
+    </RadzenColumn>
+    <RadzenColumn Size="12" SizeLG="5">
+        <div class="camera-list">
+            @foreach (var cam in Vm.Cameras)
+            {
+                <CameraCard @key="cam.Id" Vm="cam" />
+            }
+        </div>
+    </RadzenColumn>
+</RadzenRow>

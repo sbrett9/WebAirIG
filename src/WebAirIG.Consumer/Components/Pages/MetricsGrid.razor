@@ -1,0 +1,19 @@
+@* Presentational table: binds a list of evaluation rows, no logic. *@
+<RadzenDataGrid TItem="EvalRow" Data="@Rows" Density="Density.Compact">
+    <Columns>
+        <RadzenDataGridColumn TItem="EvalRow" Property="Scope" Title="Scope" />
+        <RadzenDataGridColumn TItem="EvalRow" Property="Frames" Title="Frames" />
+        <RadzenDataGridColumn TItem="EvalRow" Property="Tp" Title="TP" />
+        <RadzenDataGridColumn TItem="EvalRow" Property="Fp" Title="FP" />
+        <RadzenDataGridColumn TItem="EvalRow" Property="Fn" Title="FN" />
+        <RadzenDataGridColumn TItem="EvalRow" Property="Precision" Title="Precision" />
+        <RadzenDataGridColumn TItem="EvalRow" Property="Recall" Title="Recall" />
+        <RadzenDataGridColumn TItem="EvalRow" Property="F1" Title="F1" />
+        <RadzenDataGridColumn TItem="EvalRow" Property="MeanIou" Title="Mean IoU" />
+        <RadzenDataGridColumn TItem="EvalRow" Property="IdSwitches" Title="ID switches" />
+    </Columns>
+</RadzenDataGrid>
+
+@code {
+    [Parameter, EditorRequired] public IReadOnlyList<EvalRow> Rows { get; set; } = [];
+}

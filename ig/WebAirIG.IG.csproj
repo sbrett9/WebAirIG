@@ -1,0 +1,15 @@
+<Project Sdk="Godot.NET.Sdk/4.7.2">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <EnableDynamicLoading>true</EnableDynamicLoading>
+    <RootNamespace>WebAirIG.IG</RootNamespace>
+    <!-- Godot type names (Environment, Timer, Range...) collide with System ones; keep usings explicit. -->
+    <ImplicitUsings>disable</ImplicitUsings>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <ConcurrentGarbageCollection>true</ConcurrentGarbageCollection>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\src\WebAirIG.Common\WebAirIG.Common.csproj" />
+    <ProjectReference Include="..\src\WebAirIG.Cigi\WebAirIG.Cigi.csproj" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,5 @@
+# YOLO26 needs ultralytics >= 8.4.0. Pin a version: the default ONNX head changed in 8.4.142
+# (classic [1,4+nc,N] by default; nms=False gives the NMS-free [1,300,6] head). The consumer accepts both.
+ultralytics>=8.4.142
+onnx>=1.17
+onnxslim
